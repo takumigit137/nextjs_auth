@@ -1,8 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/app/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Stack,
+    TextField,
+    Typography,
+    Alert
+} from "@mui/material";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -23,24 +33,38 @@ export default function LoginPage() {
         router.push("/profile")
     };
     return (
-        <form onSubmit={handleLogin}>
-            <h2>Login</h2>
-            <input 
-                type="email"
-                placeholder="Mail address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-            <button type="submit">Login</button>
-            <p>{message}</p>
-        </form>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", p: 2 }}>
+            <Card sx={{ maxWidth: 420, width: "100%" }}>
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>Login</Typography>
+                    {message && (
+                        <Alert severity={message.includes("success") ? "success" : "error"} sx={{ mb: 2 }}>
+                            {message}
+                        </Alert>
+                    )}
+                    <Box component="form" onSubmit={handleLogin} noValidate>
+                        <Stack spacing={2}>
+                            <TextField
+                                label="Mail address"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                            <Button type="submit" variant="contained">Login</Button>
+                        </Stack>
+                    </Box>
+                </CardContent>
+            </Card>
+        </Box>
     );
 }

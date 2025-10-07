@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/app/lib/supabaseClient";
+import { Box, Card, CardContent, Typography, Skeleton } from "@mui/material";
 
 export default function ProfilePage() {
     const [username, setUsername] = useState<string | null>(null);
@@ -18,9 +19,17 @@ export default function ProfilePage() {
     }, []);
 
     return (
-        <div>
-            <h2>Profile</h2>
-            {username ? <p>Hello, {username}!</p> : <p>Loading...</p>}
-        </div>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", p: 2 }}>
+            <Card sx={{ maxWidth: 520, width: "100%" }}>
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>Profile</Typography>
+                    {username ? (
+                        <Typography>Hello, {username}!</Typography>
+                    ) : (
+                        <Skeleton variant="text" width={200} />
+                    )}
+                </CardContent>
+            </Card>
+        </Box>
     );
 }

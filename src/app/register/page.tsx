@@ -1,7 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/app/lib/supabaseClient";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Stack,
+    TextField,
+    Typography,
+    Alert
+} from "@mui/material";
 
 export default function RegisterPage() {
     const [email, setEmail] = useState("");
@@ -24,7 +34,7 @@ export default function RegisterPage() {
         const {data, error} = await supabase.auth.signUp({
             email,
             password,
-            option: {
+            options: {
                 emailRedirectTo: `${window.location.origin}/profile`,
                 data: {username},
             },
@@ -38,31 +48,45 @@ export default function RegisterPage() {
 
     };
     return (
-        <form onSubmit={handleRegister}>
-            <h2>New registration</h2>
-            <input 
-                type="text"
-                placeholder="User name"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-            />
-            <input
-                type="email"
-                placeholder="Mail address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-            <button type="submit">Register</button>
-            <p>{message}</p>
-        </form>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", p: 2 }}>
+            <Card sx={{ maxWidth: 480, width: "100%" }}>
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>New registration</Typography>
+                    {message && (
+                        <Alert severity={message.toLowerCase().includes("error") ? "error" : "info"} sx={{ mb: 2 }}>
+                            {message}
+                        </Alert>
+                    )}
+                    <Box component="form" onSubmit={handleRegister} noValidate>
+                        <Stack spacing={2}>
+                            <TextField
+                                label="User name"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Mail address"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                            <Button type="submit" variant="contained">Register</Button>
+                        </Stack>
+                    </Box>
+                </CardContent>
+            </Card>
+        </Box>
     );
 }
